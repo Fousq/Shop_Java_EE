@@ -13,6 +13,7 @@
     <resultMap id="product_result_map" class="product">
         <result property="id" javaType="int" jdbcType="int" column="id" />
         <result property="name" javaType="java.lang.String" jdbcType="CHAR" column="name"/>
+        <result property="price" javaType="double" column="price" />
         <result property="categoryName" javaType="java.lang.String" column="category_name" />
     </resultMap>
 
@@ -22,20 +23,20 @@
     </resultMap>
 
     <select id="get_all_product" resultMap="product_result_map">
-        SELECT id, name, category_name FROM product
+        SELECT id, name, price, category_name FROM product
     </select>
 
     <select id="get_product_by_id" resultMap="product_result_map"
             parameterClass="int">
-        SELECT id, name, category_name FROM product WHERE id = #id#
+        SELECT id, name, price, category_name FROM product WHERE id = #id#
     </select>
 
     <insert id="insert_product" parameterClass="product">
-        INSERT INTO product(name, category_name) VALUES (#name#, #categoryName#)
+        INSERT INTO product(name, price, category_name) VALUES (#name#, #price#, #categoryName#)
     </insert>
 
     <update id="update_product" parameterClass="product">
-        UPDATE product SET name = #name#, category_name = #categoryName# WHERE id = #id#
+        UPDATE product SET name = #name#, price = #price#, category_name = #categoryName# WHERE id = #id#
     </update>
 
     <delete id="delete_product_by_id" parameterClass="int">
@@ -44,6 +45,6 @@
 
     <select id="get_all_product_by_category" resultMap="product_without_category_result_map"
             parameterClass="java.lang.String">
-        SELECT id, name FROM product WHERE category_name = #categoryName#
+        SELECT id, name, price FROM product WHERE category_name = #categoryName#
     </select>
 </sqlMap>

@@ -56,8 +56,8 @@ public class ProductDaoTest {
 
     @Test
     public void testCreateProductShouldNotThrowAnyException() {
-        productDao.create(new Product("testProductWithoutCategory"));
-        productDao.create(new Product("testProductWithCategory", "category1"));
+        productDao.create(new Product("testProductWithoutCategory", 1.0));
+        productDao.create(new Product("testProductWithCategory", 1.0, "category1"));
         List<Product> products = productDao.findAll();
         Product productWithoutCategory = products.get(products.size() - 2);
         Product productWithCategory = products.get(products.size() - 1);
@@ -72,12 +72,12 @@ public class ProductDaoTest {
 
     @Test(expected = DaoException.class)
     public void testCreateProductShouldThrowDaoException() {
-        productDao.create(new Product("testProduct1", "non-existed_category"));
+        productDao.create(new Product("testProduct1", 1.0, "non-existed_category"));
     }
 
     @Test
     public void testUpdateProductName() {
-        productDao.create(new Product("testProductNameToBeUpdated", "category1"));
+        productDao.create(new Product("testProductNameToBeUpdated", 1.0,"category1"));
         List<Product> products = productDao.findAll();
         Product product = products.get(products.size() - 1);
         product.setName("updatedProduct");
@@ -90,6 +90,7 @@ public class ProductDaoTest {
     @Test
     public void testUpdateProductCategoryNameShouldNotThrowException() {
         productDao.create(new Product("testProductCategoryNameToBeUpdated",
+                                       1.0,
                                 "category1"));
         List<Product> products = productDao.findAll();
         Product product = products.get(products.size() - 1);
@@ -103,7 +104,7 @@ public class ProductDaoTest {
 
     @Test(expected = DaoException.class)
     public void testUpdateProductCategoryNameShouldThrowException() {
-        productDao.create(new Product("testProductCategoryName", "category1"));
+        productDao.create(new Product("testProductCategoryName", 1.0,"category1"));
         List<Product> products = productDao.findAll();
         Product product = products.get(products.size() - 1);
         product.setCategoryName("non-exist_category");
@@ -112,7 +113,7 @@ public class ProductDaoTest {
 
     @Test(expected = NoProductFoundException.class)
     public void testDeleteProductShouldThrowNoProductFoundException() {
-        productDao.create(new Product("testProductToBeDeleted"));
+        productDao.create(new Product("testProductToBeDeleted", 1.0));
         List<Product> products = productDao.findAll();
         Product product = products.get(products.size() - 1);
         productDao.delete(product.getId());

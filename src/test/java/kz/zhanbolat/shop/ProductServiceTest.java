@@ -29,8 +29,8 @@ public class ProductServiceTest {
     @Test
     public void testGetProductsShouldReturnListOfProducts() {
         List<Product> products = new ArrayList<>();
-        products.add(new Product(1, "test1", "test1"));
-        products.add(new Product(2, "test2", "test2"));
+        products.add(new Product(1, "test1", 1.0, "test1"));
+        products.add(new Product(2, "test2", 1.0, "test2"));
         when(productDao.findAll()).thenReturn(products);
 
         List<Product> productList = productService.getProducts();
@@ -43,9 +43,9 @@ public class ProductServiceTest {
     public void testGetProductsByCategoryShouldReturnListOfProducts() {
         List<Product> productsOfTest1 = new ArrayList<>();
         List<Product> productsOfTest2 = new ArrayList<>();
-        productsOfTest1.add(new Product(1, "test1", "test1"));
-        productsOfTest1.add(new Product(2, "test2", "test1"));
-        productsOfTest2.add(new Product(3, "test3", "test2"));
+        productsOfTest1.add(new Product(1, "test1", 1.0, "test1"));
+        productsOfTest1.add(new Product(2, "test2", 1.0, "test1"));
+        productsOfTest2.add(new Product(3, "test3", 1.0, "test2"));
         when(productDao.findAllByCategory("test1")).thenReturn(productsOfTest1);
         when(productDao.findAllByCategory("test2")).thenReturn(productsOfTest2);
 
