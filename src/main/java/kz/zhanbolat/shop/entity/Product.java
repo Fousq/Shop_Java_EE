@@ -7,14 +7,27 @@ import java.util.StringJoiner;
 public class Product implements Serializable {
     private Integer id;
     private String name;
+    private Double price;
     private String categoryName;
 
     public Product() {
     }
 
-    public Product(Integer id, String name, String categoryName) {
+    public Product(String name, Double price) {
+        this.name = name;
+        this.price = price;
+    }
+
+    public Product(String name, Double price, String categoryName) {
+        this.name = name;
+        this.price = price;
+        this.categoryName = categoryName;
+    }
+
+    public Product(Integer id, String name, Double price, String categoryName) {
         this.id = id;
         this.name = name;
+        this.price = price;
         this.categoryName = categoryName;
     }
 
@@ -42,11 +55,20 @@ public class Product implements Serializable {
         this.categoryName = categoryName;
     }
 
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
     @Override
     public String toString() {
         return new StringJoiner(", ", Product.class.getSimpleName() + "[", "]")
                 .add("id=" + id)
                 .add("name='" + name + "'")
+                .add("price=" + price)
                 .add("categoryName='" + categoryName + "'")
                 .toString();
     }
@@ -58,11 +80,12 @@ public class Product implements Serializable {
         Product product = (Product) o;
         return Objects.equals(id, product.id) &&
                 Objects.equals(name, product.name) &&
+                Objects.equals(price, product.price) &&
                 Objects.equals(categoryName, product.categoryName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, categoryName);
+        return Objects.hash(id, name, price, categoryName);
     }
 }

@@ -29,7 +29,7 @@ public class PurchaseServiceTest {
     @Test
     public void testPurchaseProductShouldNotThrowException() {
         when(productDao.findOne(anyInt()))
-                .thenReturn(new Product(1, "test1", "test1"));
+                .thenReturn(new Product(1, "test1", 1.0, "test1"));
 
         purchaseService.purchaseProduct(1);
     }
@@ -44,9 +44,9 @@ public class PurchaseServiceTest {
     @Test
     public void testGetListOfProductShouldReturnNotEmptyList() {
         when(productDao.findOne(1))
-                .thenReturn(new Product(1, "test1", "test1"));
+                .thenReturn(new Product(1, "test1", 1.0, "test1"));
         when(productDao.findOne(2))
-                .thenReturn(new Product(2, "test2", "test2"));
+                .thenReturn(new Product(2, "test2", 1.0, "test2"));
         purchaseService.purchaseProduct(1);
         purchaseService.purchaseProduct(2);
         List<Product> products = purchaseService.getListOfProduct();

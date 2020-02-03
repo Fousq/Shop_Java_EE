@@ -1,6 +1,6 @@
 package kz.zhanbolat.shop.exception;
 
-public class NoProductFoundException extends RuntimeException {
+public class NoProductFoundException extends DaoException {
     public NoProductFoundException() {
         super();
     }

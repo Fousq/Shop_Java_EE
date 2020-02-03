@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap
+        PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap>
+    <cacheModel id="productCache" type="LRU">
+        <flushInterval hours="24" />
+        <property name="size" value="1000"/>
+    </cacheModel>
+    
+    <typeAlias alias="product" type="kz.zhanbolat.shop.entity.Product"/>
+    
+    <resultMap id="product_result_map" class="product">
+        <result property="id" javaType="int" jdbcType="int" column="id" />
+        <result property="name" javaType="java.lang.String" jdbcType="CHAR" column="name"/>
+        <result property="price" javaType="double" column="price" />
+        <result property="categoryName" javaType="java.lang.String" column="category_name" />
+    </resultMap>
+
+    <resultMap id="product_without_category_result_map" class="product">
+        <result property="id" javaType="int" jdbcType="int" column="id" />
+        <result property="name" javaType="java.lang.String" column="name"/>
+    </resultMap>
+
+    <select id="get_all_product" resultMap="product_result_map">
+        SELECT id, name, price, category_name FROM product
+    </select>
+
+    <select id="get_product_by_id" resultMap="product_result_map"
+            parameterClass="int">
+        SELECT id, name, price, category_name FROM product WHERE id = #id#
+    </select>
+
+    <insert id="insert_product" parameterClass="product">
+        INSERT INTO product(name, price, category_name) VALUES (#name#, #price#, #categoryName#)
+    </insert>
+
+    <update id="update_product" parameterClass="product">
+        UPDATE product SET name = #name#, price = #price#, category_name = #categoryName# WHERE id = #id#
+    </update>
+
+    <delete id="delete_product_by_id" parameterClass="int">
+        DELETE FROM product WHERE id = #id#
+    </delete>
+
+    <select id="get_all_product_by_category" resultMap="product_without_category_result_map"
+            parameterClass="java.lang.String">
+        SELECT id, name, price FROM product WHERE category_name = #categoryName#
+    </select>
+</sqlMap>
