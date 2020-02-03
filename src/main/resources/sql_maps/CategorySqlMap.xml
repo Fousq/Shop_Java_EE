@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap
+        PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap>
+    <cacheModel id="categoryCache" type="LRU">
+        <flushInterval hours="24" />
+        <property name="size" value="1000"/>
+    </cacheModel>
+
+    <typeAlias alias="category" type="kz.zhanbolat.shop.entity.Category"/>
+
+    <resultMap id="category_result_map" class="category">
+        <result property="name" javaType="java.lang.String" column="name"/>
+    </resultMap>
+
+    <select id="get_all_category" resultMap="category_result_map">
+        SELECT name FROM category
+    </select>
+
+    <insert id="insert_category" parameterClass="category">
+        INSERT INTO category(name) VALUES (#name#)
+    </insert>
+
+    <delete id="delete_category" parameterClass="java.lang.String">
+        DELETE FROM category WHERE name = #id#
+    </delete>
+</sqlMap>

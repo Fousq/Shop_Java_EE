@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap
+        PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap>
+    <cacheModel id="userCache" type="LRU">
+        <flushInterval hours="24"/>
+        <property name="size" value="1000"/>
+    </cacheModel>
+
+    <typeAlias alias="user" type="kz.zhanbolat.shop.entity.User"/>
+
+    <resultMap id="user_result_map" class="user">
+        <result property="id" javaType="int" jdbcType="int" column="id" />
+        <result property="username" javaType="java.lang.String" column="username"/>
+        <result property="password" javaType="java.lang.String" column="password"/>
+    </resultMap>
+
+    <select id="get_all_user" resultMap="user_result_map">
+        SELECT id, username, password FROM user_account
+    </select>
+
+    <select id="get_user_by_id" resultMap="user_result_map" parameterClass="int">
+        SELECT id, username, password FROM user_account WHERE id = #id#
+    </select>
+
+    <insert id="insert_user" parameterClass="user">
+        INSERT INTO user_account(username, password) VALUES (#username#, #password#)
+    </insert>
+
+    <update id="update_user" parameterClass="user">
+        UPDATE user_account SET username = #username#, password = #password# WHERE id = #id#
+    </update>
+
+    <delete id="delete_user_by_id" parameterClass="int">
+        DELETE FROM user_account WHERE id = #id#
+    </delete>
+
+    <select id="count_user_of_username_and_password" parameterClass="user" resultClass="int">
+        SELECT COUNT(*) FROM user_account WHERE username = #username# AND password = #password#
+    </select>
+</sqlMap>
