@@ -16,13 +16,20 @@ import java.util.List;
 @Stateless
 public class ProductDaoImpl implements ProductDao {
     private static final Logger logger = LogManager.getLogger(ProductDaoImpl.class);
+    private static final String SELECT_ALL_QUERY_ID = "get_all_product";
+    private static final String SELECT_ONE_BY_ID_QUERY_ID = "get_product_by_id";
+    private static final String INSERT_QUERY_ID = "insert_product";
+    private static final String UPDATE_QUERY_ID = "update_product";
+    private static final String DELETE_BY_ID_QUERY_ID = "delete_product_by_id";
+    private static final String SELECT_ALL_BY_CATEGORY_NAME_QUERY_ID = "get_all_product_by_category";
+    private static final String SELECT_ONE_BY_NAME_QUERY_ID = "get_product_by_name";
     @Inject
     private SqlMapClient sqlMapClient;
 
     @Override
     public List<Product> findAll() {
         try {
-            return sqlMapClient.queryForList("get_all_product");
+            return sqlMapClient.queryForList(SELECT_ALL_QUERY_ID);
         } catch (SQLException e) {
             logger.error("Got exception on select query: ", e);
             throw new DaoException(e);
@@ -32,7 +39,7 @@ public class ProductDaoImpl implements ProductDao {
     @Override
     public Product findOne(Integer id) {
         try {
-            Product product = (Product) sqlMapClient.queryForObject("get_product_by_id", id);
+            Product product = (Product) sqlMapClient.queryForObject(SELECT_ONE_BY_ID_QUERY_ID, id);
             if (product == null) {
                 throw new NoProductFoundException("No product was found");
             }
@@ -46,7 +53,7 @@ public class ProductDaoImpl implements ProductDao {
     @Override
     public void create(Product entity) {
         try {
-            sqlMapClient.insert("insert_product", entity);
+            sqlMapClient.insert(INSERT_QUERY_ID, entity);
         } catch (SQLException e) {
             logger.error("Got exception on insert query: ", e);
             throw new DaoException(e);
@@ -56,7 +63,7 @@ public class ProductDaoImpl implements ProductDao {
     @Override
     public void update(Product entity) {
         try {
-            sqlMapClient.update("update_product", entity);
+            sqlMapClient.update(UPDATE_QUERY_ID, entity);
         } catch (SQLException e) {
             logger.error("Got exception on update query: ", e);
             throw new DaoException(e);
@@ -66,7 +73,7 @@ public class ProductDaoImpl implements ProductDao {
     @Override
     public void delete(Integer id) {
         try {
-            sqlMapClient.delete("delete_product_by_id", id);
+            sqlMapClient.delete(DELETE_BY_ID_QUERY_ID, id);
         } catch (SQLException e) {
             logger.error("Got exception on delete query: ", e);
             throw new DaoException(e);
@@ -76,10 +83,28 @@ public class ProductDaoImpl implements ProductDao {
     @Override
     public List<Product> findAllByCategory(String categoryName) {
         try {
-            return sqlMapClient.queryForList("get_all_product_by_category", categoryName);
+            List<Product> products = sqlMapClient.queryForList(SELECT_ALL_BY_CATEGORY_NAME_QUERY_ID, categoryName);
+            if (products.isEmpty()) {
+                throw new NoProductFoundException("Products with such category don't exist");
+            }
+            return products;
         } catch (SQLException e) {
             logger.error("Got exception on select query: ", e);
             throw new DaoException(e);
+        }
+    }
+
+    @Override
+    public Product findOneByName(String name) {
+        try {
+            Product product =  (Product) sqlMapClient.queryForObject(SELECT_ONE_BY_NAME_QUERY_ID, name);
+            if (product == null) {
+                throw new NoProductFoundException("Such product doesn't exist");
+            }
+            return product;
+        } catch (SQLException e) {
+            logger.error("Got exception on select query: ", e);
+            throw new NoProductFoundException(e);
         }
     }
 }

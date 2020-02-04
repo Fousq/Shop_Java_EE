@@ -34,7 +34,7 @@ public class ProductServiceTest {
         when(productDao.findAll()).thenReturn(products);
 
         List<Product> productList = productService.getProducts();
-
+        logger.debug(productList);
         assertNotNull(productList);
         assertEquals(2, productList.size());
     }

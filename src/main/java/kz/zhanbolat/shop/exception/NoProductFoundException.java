@@ -1,5 +1,8 @@
 package kz.zhanbolat.shop.exception;
 
+import javax.ejb.ApplicationException;
+
+@ApplicationException
 public class NoProductFoundException extends DaoException {
     public NoProductFoundException() {
         super();
@@ -7,10 +10,6 @@ public class NoProductFoundException extends DaoException {
 
     public NoProductFoundException(String message) {
         super(message);
-    }
-
-    public NoProductFoundException(String message, Throwable cause) {
-        super(message, cause);
     }
 
     public NoProductFoundException(Throwable cause) {

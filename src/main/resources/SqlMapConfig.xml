@@ -6,7 +6,7 @@
     <properties resource="./database.properties" />
 
     <settings useStatementNamespaces="false"
-              cacheModelsEnabled="true"
+              cacheModelsEnabled="false"
               enhancementEnabled="true"
               maxTransactions="10"
               maxSessions="10"

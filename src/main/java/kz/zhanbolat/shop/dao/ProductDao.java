@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface ProductDao extends BaseDao<Product, Integer> {
     List<Product> findAllByCategory(String categoryName);
+    Product findOneByName(String name);
 }

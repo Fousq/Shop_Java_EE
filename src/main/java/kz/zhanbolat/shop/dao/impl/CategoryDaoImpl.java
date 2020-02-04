@@ -15,13 +15,16 @@ import java.util.List;
 @Stateless
 public class CategoryDaoImpl implements BaseDao<Category, String> {
     private static final Logger logger = LogManager.getLogger(CategoryDaoImpl.class);
+    private static final String SELECT_ALL_QUERY_ID = "get_all_category";
+    private static final String INSERT_QUERY_ID = "insert_category";
+    private static final String DELETE_QUERY_ID = "delete_category";
     @Inject
     private SqlMapClient sqlMapClient;
 
     @Override
     public List<Category> findAll() {
         try {
-            return sqlMapClient.queryForList("get_all_category");
+            return sqlMapClient.queryForList(SELECT_ALL_QUERY_ID);
         } catch (SQLException e) {
             logger.error("Got exception on select query: ", e);
             throw new DaoException(e);
@@ -37,7 +40,7 @@ public class CategoryDaoImpl implements BaseDao<Category, String> {
     @Override
     public void create(Category entity) {
         try {
-            sqlMapClient.insert("insert_category", entity);
+            sqlMapClient.insert(INSERT_QUERY_ID, entity);
         } catch (SQLException e) {
             logger.error("Got exception on insert query: ", e);
             throw new DaoException(e);
@@ -53,7 +56,7 @@ public class CategoryDaoImpl implements BaseDao<Category, String> {
     @Override
     public void delete(String id) {
         try {
-            sqlMapClient.delete("delete_category", id);
+            sqlMapClient.delete(DELETE_QUERY_ID, id);
         } catch (SQLException e) {
             logger.error("Got exception on delete query: ", e);
             throw new DaoException(e);
