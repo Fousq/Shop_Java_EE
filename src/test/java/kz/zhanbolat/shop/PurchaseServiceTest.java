@@ -12,9 +12,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
@@ -52,5 +54,19 @@ public class PurchaseServiceTest {
         List<Product> products = purchaseService.getListOfProduct();
 
         assertEquals(2, products.size());
+    }
+
+    @Test
+    public void testPurchaseShouldNotReturnBigDecimalZero() {
+        when(productDao.findOne(1))
+                .thenReturn(new Product(1, "test1", 1.0, "test1"));
+        when(productDao.findOne(2))
+                .thenReturn(new Product(2, "test2", 2.0, "test2"));
+        purchaseService.purchaseProduct(1);
+        purchaseService.purchaseProduct(2);
+        List<Product> listOfProduct = purchaseService.getListOfProduct();
+        BigDecimal totalSum = purchaseService.purchase();
+
+        assertNotEquals(BigDecimal.ZERO, totalSum);
     }
 }

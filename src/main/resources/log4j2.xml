@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<Configuration xmlns="http://logging.apache.org/log4j/2.0/config">
+<Configuration status="DEBUG">
     <Appenders>
-        <Console name="Console" target="STDOUT">
-            <PatternLayout pattern="[%-5p] %c [%M:%L]: %m%n" />
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="[%highlight{%-5level}] %c [%M:%L]: %m%n" />
         </Console>
+        <File name="fileAppender" fileName="logs/app.log">
+            <PatternLayout >
+                <Pattern>[%highlight{%-5level}] %c [%M:%L]: %m%n</Pattern>
+            </PatternLayout>
+        </File>
     </Appenders>
     <Loggers>
         <Root level="trace">
             <AppenderRef ref="Console"/>
+            <AppenderRef ref="fileAppender" />
         </Root>
     </Loggers>
 </Configuration>

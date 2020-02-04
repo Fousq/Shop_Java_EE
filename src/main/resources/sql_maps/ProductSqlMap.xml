@@ -20,6 +20,7 @@
     <resultMap id="product_without_category_result_map" class="product">
         <result property="id" javaType="int" jdbcType="int" column="id" />
         <result property="name" javaType="java.lang.String" column="name"/>
+        <result property="price" javaType="double" column="price" />
     </resultMap>
 
     <select id="get_all_product" resultMap="product_result_map">

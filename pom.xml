@@ -20,18 +20,19 @@
     <javaee.version>8.0</javaee.version>
     <ibatis.version>2.3.4.726</ibatis.version>
     <junit.version>4.12</junit.version>
+    <failOnMissingWebXml>false</failOnMissingWebXml>
   </properties>
 
   <profiles>
     <profile>
       <id>dev</id>
       <activation>
-        <activeByDefault />
+        <activeByDefault>true</activeByDefault>
       </activation>
     </profile>
-    <profile>
-      <id>test</id>
-    </profile>
+      <profile>
+          <id>test</id>
+      </profile>
   </profiles>
 
   <dependencies>
@@ -80,6 +81,41 @@
       <version>3.1.3.Final</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.jboss.resteasy</groupId>
+      <artifactId>resteasy-jaxrs</artifactId>
+      <version>3.10.0.Final</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <version>42.2.9</version>
+    </dependency>
+    <dependency>
+      <groupId>org.glassfish.jersey.test-framework.providers</groupId>
+      <artifactId>jersey-test-framework-provider-jdk-http</artifactId>
+      <version>2.30</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.glassfish.jersey.core</groupId>
+      <artifactId>jersey-server</artifactId>
+      <version>2.30</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.glassfish.jersey.containers</groupId>
+      <artifactId>jersey-container-servlet</artifactId>
+      <version>2.30</version>
+      <scope>test</scope>
+    </dependency>
+      <dependency>
+          <groupId>org.glassfish.jersey.inject</groupId>
+          <artifactId>jersey-cdi2-se</artifactId>
+          <version>2.30</version>
+          <scope>test</scope>
+      </dependency>
   </dependencies>
 
   <build>
@@ -90,5 +126,14 @@
         <filtering>true</filtering>
       </resource>
     </resources>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-war-plugin</artifactId>
+            <version>3.2.3</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
   </build>
 </project>
