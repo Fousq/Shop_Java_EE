@@ -20,6 +20,7 @@
     <javaee.version>8.0</javaee.version>
     <ibatis.version>2.3.4.726</ibatis.version>
     <junit.version>4.12</junit.version>
+    <failOnMissingWebXml>false</failOnMissingWebXml>
   </properties>
 
   <profiles>
@@ -79,6 +80,11 @@
       <artifactId>weld-se-core</artifactId>
       <version>3.1.3.Final</version>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.resteasy</groupId>
+      <artifactId>resteasy-jaxrs</artifactId>
+      <version>3.10.0.Final</version>
     </dependency>
   </dependencies>
 
