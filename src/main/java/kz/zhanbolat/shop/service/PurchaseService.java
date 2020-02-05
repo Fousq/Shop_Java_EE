@@ -1,13 +1,14 @@
 package kz.zhanbolat.shop.service;
 
 import kz.zhanbolat.shop.entity.Product;
-import kz.zhanbolat.shop.service.dto.ProductDTO;
+import kz.zhanbolat.shop.entity.Receipt;
 
 import java.math.BigDecimal;
-import java.util.List;
+import java.util.Map;
 
 public interface PurchaseService {
-    void purchaseProduct(ProductDTO product);
-    List<ProductDTO> getListOfProduct();
-    BigDecimal purchase();
+    void purchaseProduct(Integer productId, Integer quantity);
+    Map<Product, Integer> getListOfProduct();
+    Receipt purchase();
+    BigDecimal calculateTotalSum();
 }

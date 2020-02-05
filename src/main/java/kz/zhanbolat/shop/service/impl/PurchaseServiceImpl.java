@@ -2,55 +2,57 @@ package kz.zhanbolat.shop.service.impl;
 
 import kz.zhanbolat.shop.dao.ProductDao;
 import kz.zhanbolat.shop.entity.Product;
+import kz.zhanbolat.shop.entity.Receipt;
 import kz.zhanbolat.shop.service.PurchaseService;
-import kz.zhanbolat.shop.service.dto.ProductDTO;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Stateless
 public class PurchaseServiceImpl implements PurchaseService {
-    private Set<ProductDTO> purchasedProducts;
+    @Inject
+    private ProductDao productDao;
+    private Map<Product, Integer> purchasedProducts;
 
     public PurchaseServiceImpl() {
-        purchasedProducts = new HashSet<>();
+        purchasedProducts = new HashMap<>();
     }
 
     @Override
     /**
      * @param productId - id of product entity
+     * @param quantity - the amount of product to purchase
      * @throw NoProductFoundException - throw in situation where product wasn't found
      */
-    public void purchaseProduct(ProductDTO product) {
-        purchasedProducts.add(product);
+    public void purchaseProduct(Integer productId, Integer quantity) {
+        Product product = productDao.findOne(productId);
+        purchasedProducts.put(product, quantity);
     }
 
     @Override
-    public List<ProductDTO> getListOfProduct() {
-        return new ArrayList<>(purchasedProducts);
+    public Map<Product, Integer> getListOfProduct() {
+        return purchasedProducts;
     }
 
     @Override
-    public BigDecimal purchase() {
-        List<BigDecimal> prices = purchasedProducts.stream()
-                .map(this::calculateTotalPrice)
-                .collect(Collectors.toList());
+    public Receipt purchase() {
+        Receipt receipt = new Receipt(Collections.unmodifiableMap(purchasedProducts), calculateTotalSum());
         purchasedProducts.clear();
-        return calculateTotalSum(prices);
+        return receipt;
     }
 
-    private BigDecimal calculateTotalPrice(ProductDTO product) {
-        return BigDecimal.valueOf(product.getPrice() * product.getSequence());
-    }
-
-    private BigDecimal calculateTotalSum(List<BigDecimal> prices) {
+    @Override
+    public BigDecimal calculateTotalSum() {
         BigDecimal totalSum = BigDecimal.ZERO;
-        for (BigDecimal price : prices) {
-            totalSum = totalSum.add(price);
+        for (Product purchasedProduct : purchasedProducts.keySet()) {
+            totalSum = totalSum.add(calculateTotalPrice(purchasedProduct));
         }
         return totalSum;
+    }
+
+    private BigDecimal calculateTotalPrice(Product product) {
+        return BigDecimal.valueOf(product.getPrice() * purchasedProducts.get(product));
     }
 }

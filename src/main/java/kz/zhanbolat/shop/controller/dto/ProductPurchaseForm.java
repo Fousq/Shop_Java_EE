@@ -1,16 +1,16 @@
-package kz.zhanbolat.shop.service.dto;
+package kz.zhanbolat.shop.controller.dto;
 
 import java.util.Objects;
 
-public class ProductDTO {
+public class ProductPurchaseForm {
     private String name;
     private Double price;
-    private Integer sequence;
+    private Integer quantity;
 
-    public ProductDTO(String name, Double price, Integer sequence) {
+    public ProductPurchaseForm(String name, Double price, Integer quantity) {
         this.name = name;
         this.price = price;
-        this.sequence = sequence;
+        this.quantity = quantity;
     }
 
     public String getName() {
@@ -29,26 +29,25 @@ public class ProductDTO {
         this.price = price;
     }
 
-    public Integer getSequence() {
-        return sequence;
+    public Integer getQuantity() {
+        return quantity;
     }
 
-    public void setSequence(Integer sequence) {
-        this.sequence = sequence;
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ProductDTO that = (ProductDTO) o;
+        ProductPurchaseForm that = (ProductPurchaseForm) o;
         return Objects.equals(name, that.name) &&
-                Objects.equals(price, that.price) &&
-                Objects.equals(sequence, that.sequence);
+                Objects.equals(price, that.price);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, price, sequence);
+        return Objects.hash(name, price);
     }
 }
