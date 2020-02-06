@@ -82,4 +82,14 @@ public class ProductDaoImpl implements ProductDao {
             throw new DaoException(e);
         }
     }
+
+    @Override
+    public Product findOneByName(String name) {
+        try {
+            return (Product) sqlMapClient.queryForObject("get_product_by_name", name);
+        } catch (SQLException e) {
+            logger.error("Got exception on select query: ", e);
+            throw new NoProductFoundException(e);
+        }
+    }
 }

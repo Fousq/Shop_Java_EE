@@ -128,6 +128,15 @@ public class ProductDaoTest {
         assertNotEquals(Collections.EMPTY_LIST, products);
     }
 
+    @Test
+    public void testFindOneByNameShouldReturnProductObject() {
+        Product product = productDao.findOneByName("product1");
+        logger.debug(product);
+
+        assertNotNull(product);
+        assertEquals("product1", product.getName());
+    }
+
     @AfterClass
     public static void tearDown() {
         container.close();

@@ -1,11 +1,15 @@
 package kz.zhanbolat.shop.controller.dto;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class ProductPurchaseForm {
+public class ProductPurchaseForm implements Serializable {
     private String name;
     private Double price;
     private Integer quantity;
+
+    public ProductPurchaseForm() {
+    }
 
     public ProductPurchaseForm(String name, Double price, Integer quantity) {
         this.name = name;

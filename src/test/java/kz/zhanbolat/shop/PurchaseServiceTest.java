@@ -2,6 +2,7 @@ package kz.zhanbolat.shop;
 
 import kz.zhanbolat.shop.dao.ProductDao;
 import kz.zhanbolat.shop.entity.Product;
+import kz.zhanbolat.shop.entity.Receipt;
 import kz.zhanbolat.shop.exception.NoProductFoundException;
 import kz.zhanbolat.shop.service.impl.PurchaseServiceImpl;
 import org.apache.logging.log4j.LogManager;
@@ -13,11 +14,10 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.math.BigDecimal;
-import java.util.List;
+import java.util.Collections;
+import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.mockito.ArgumentMatchers.anyInt;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -30,43 +30,69 @@ public class PurchaseServiceTest {
 
     @Test
     public void testPurchaseProductShouldNotThrowException() {
-        when(productDao.findOne(anyInt()))
+        when(productDao.findOneByName(anyString()))
                 .thenReturn(new Product(1, "test1", 1.0, "test1"));
 
-        purchaseService.purchaseProduct(1);
+        purchaseService.purchaseProduct("test1", 1);
     }
 
     @Test(expected = NoProductFoundException.class)
     public void testPurchaseProductShouldThrowException() {
-        when(productDao.findOne(anyInt())).thenThrow(new NoProductFoundException());
+        when(productDao.findOneByName(anyString())).thenThrow(new NoProductFoundException());
 
-        purchaseService.purchaseProduct(Integer.MAX_VALUE);
+        purchaseService.purchaseProduct("no name", 1);
     }
 
     @Test
     public void testGetListOfProductShouldReturnNotEmptyList() {
-        when(productDao.findOne(1))
+        when(productDao.findOneByName("test1"))
                 .thenReturn(new Product(1, "test1", 1.0, "test1"));
-        when(productDao.findOne(2))
+        when(productDao.findOneByName("test2"))
                 .thenReturn(new Product(2, "test2", 1.0, "test2"));
-        purchaseService.purchaseProduct(1);
-        purchaseService.purchaseProduct(2);
-        List<Product> products = purchaseService.getListOfProduct();
+        purchaseService.purchaseProduct("test1", 1);
+        purchaseService.purchaseProduct("test2", 2);
+        Map<Product, Integer> products = purchaseService.getListOfProduct();
 
         assertEquals(2, products.size());
     }
 
-    @Test
-    public void testPurchaseShouldNotReturnBigDecimalZero() {
-        when(productDao.findOne(1))
+    @Test(expected = RuntimeException.class)
+    public void testPurchaseShouldThrowException() {
+        when(productDao.findOneByName("test1"))
                 .thenReturn(new Product(1, "test1", 1.0, "test1"));
-        when(productDao.findOne(2))
-                .thenReturn(new Product(2, "test2", 2.0, "test2"));
-        purchaseService.purchaseProduct(1);
-        purchaseService.purchaseProduct(2);
-        List<Product> listOfProduct = purchaseService.getListOfProduct();
-        BigDecimal totalSum = purchaseService.purchase();
+        purchaseService.purchaseProduct("test1", 1);
+        purchaseService.purchaseProduct("test1", 2);
+    }
 
-        assertNotEquals(BigDecimal.ZERO, totalSum);
+    @Test
+    public void testCalculateTotalSumShouldReturnExpectedTotalSum() {
+        when(productDao.findOneByName("test1"))
+                .thenReturn(new Product(1, "test1", 1.0, "test1"));
+        when(productDao.findOneByName("test2"))
+                .thenReturn(new Product(2, "test2", 2.0, "test2"));
+        purchaseService.purchaseProduct("test1", 1);
+        purchaseService.purchaseProduct("test2", 2);
+        BigDecimal expectedTotalSum = BigDecimal.valueOf(5.0);
+        BigDecimal totalSum = purchaseService.calculateTotalSum();
+
+        assertEquals(expectedTotalSum, totalSum);
+    }
+
+    @Test
+    public void testPurchaseShouldReturnNonEmptyMap() {
+        when(productDao.findOneByName("test1"))
+                .thenReturn(new Product(1, "test1", 1.0, "test1"));
+        when(productDao.findOneByName("test2"))
+                .thenReturn(new Product(2, "test2", 2.0, "test2"));
+        purchaseService.purchaseProduct("test1", 1);
+        purchaseService.purchaseProduct("test2", 2);
+        BigDecimal expectedTotalSum = BigDecimal.valueOf(5.0);
+        Receipt purchase = purchaseService.purchase();
+        BigDecimal totalPrice = purchase.getTotalPrice();
+        Map<Product, Integer> purchasedProducts = purchase.getPurchasedProducts();
+
+        assertNotNull(purchasedProducts);
+        assertNotEquals(Collections.EMPTY_MAP, purchasedProducts);
+        assertEquals(expectedTotalSum, totalPrice);
     }
 }

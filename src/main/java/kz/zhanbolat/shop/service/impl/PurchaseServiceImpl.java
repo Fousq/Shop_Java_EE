@@ -22,13 +22,17 @@ public class PurchaseServiceImpl implements PurchaseService {
 
     @Override
     /**
-     * @param productId - id of product entity
+     * @param productName - name of product entity
      * @param quantity - the amount of product to purchase
      * @throw NoProductFoundException - throw in situation where product wasn't found
      */
-    public void purchaseProduct(Integer productId, Integer quantity) {
-        Product product = productDao.findOne(productId);
-        purchasedProducts.put(product, quantity);
+    public void purchaseProduct(String productName, Integer quantity) {
+        Product product = productDao.findOneByName(productName);
+        if (!purchasedProducts.containsKey(product)) {
+            purchasedProducts.put(product, quantity);
+        } else {
+            throw new IllegalStateException("Don't buy the same product");// will be changed
+        }
     }
 
     @Override
@@ -38,7 +42,7 @@ public class PurchaseServiceImpl implements PurchaseService {
 
     @Override
     public Receipt purchase() {
-        Receipt receipt = new Receipt(Collections.unmodifiableMap(purchasedProducts), calculateTotalSum());
+        Receipt receipt = new Receipt(Map.copyOf(purchasedProducts), calculateTotalSum());
         purchasedProducts.clear();
         return receipt;
     }

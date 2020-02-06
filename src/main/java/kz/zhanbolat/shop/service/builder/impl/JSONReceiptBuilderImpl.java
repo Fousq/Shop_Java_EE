@@ -2,7 +2,7 @@ package kz.zhanbolat.shop.service.builder.impl;
 
 import kz.zhanbolat.shop.entity.Product;
 import kz.zhanbolat.shop.service.builder.ReceiptBuilder;
-import kz.zhanbolat.shop.service.builder.ReceiptForm;
+import kz.zhanbolat.shop.service.builder.ReceiptFormat;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 import java.util.*;
 
 @Stateless
-@ReceiptForm(ReceiptForm.ReceiptType.JSON)
+@ReceiptFormat(ReceiptFormat.FormatType.JSON)
 public class JSONReceiptBuilderImpl implements ReceiptBuilder<JsonObject> {
     private static final Logger logger = LogManager.getLogger(JSONReceiptBuilderImpl.class);
     private Map<Product, Integer> purchasedProductList;
@@ -27,7 +27,7 @@ public class JSONReceiptBuilderImpl implements ReceiptBuilder<JsonObject> {
 
     @Override
     public JsonObject build() {
-        if (purchasedProductList.isEmpty() || totalSum != null) {
+        if (purchasedProductList.isEmpty() || totalSum == null) {
             throw new IllegalStateException("Receipt exception");//message will be changed later
         }
         return Json.createObjectBuilder()
@@ -37,16 +37,19 @@ public class JSONReceiptBuilderImpl implements ReceiptBuilder<JsonObject> {
 
     private JsonArrayBuilder createProductQuantityArrayJsonBuilder(Map<Product, Integer> purchasedProductList) {
         JsonArrayBuilder builder = Json.createArrayBuilder();
+        int i = 1;
         for (Product product : purchasedProductList.keySet()) {
-            JsonObjectBuilder productJsonBuilder = createProductJsonBuilder(product,
+            JsonObjectBuilder productJsonBuilder = createProductJsonBuilder(i,
+                                                                            product,
                                                                             purchasedProductList.get(product));
             builder.add(productJsonBuilder);
+            i++;
         }
         return builder;
     }
 
-    private JsonObjectBuilder createProductJsonBuilder(Product product, Integer quantity) {
-        return Json.createObjectBuilder().add("id", product.getId()).add("name", product.getName())
+    private JsonObjectBuilder createProductJsonBuilder(Integer id, Product product, Integer quantity) {
+        return Json.createObjectBuilder().add("id", id).add("name", product.getName())
                    .add("price", product.getPrice()).add("quantity", quantity);
     }
 
