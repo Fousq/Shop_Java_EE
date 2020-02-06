@@ -6,14 +6,14 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target({ElementType.TYPE})
+@Target({ElementType.TYPE, ElementType.FIELD, ElementType.CONSTRUCTOR, ElementType.ANNOTATION_TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Qualifier
-public @interface ReceiptForm {
+public @interface ReceiptFormat {
 
-    ReceiptType value();
+    FormatType value();
 
-    enum ReceiptType {
+    enum FormatType {
         JSON
     }
 }

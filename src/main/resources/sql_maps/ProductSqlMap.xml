@@ -48,4 +48,9 @@
             parameterClass="java.lang.String">
         SELECT id, name, price FROM product WHERE category_name = #categoryName#
     </select>
+
+    <select id="get_product_by_name" resultMap="product_without_category_result_map"
+            parameterClass="java.lang.String">
+        SELECT id, name, price FROM product WHERE name = #name#
+    </select>
 </sqlMap>

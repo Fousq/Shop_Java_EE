@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 import java.util.Map;
 
 public interface PurchaseService {
-    void purchaseProduct(Integer productId, Integer quantity);
+    void purchaseProduct(String productName, Integer quantity);
     Map<Product, Integer> getListOfProduct();
     Receipt purchase();
     BigDecimal calculateTotalSum();
