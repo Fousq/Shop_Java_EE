@@ -3,11 +3,6 @@
         PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
         "http://ibatis.apache.org/dtd/sql-map-2.dtd">
 <sqlMap>
-    <cacheModel id="productCache" type="LRU">
-        <flushInterval hours="24" />
-        <property name="size" value="1000"/>
-    </cacheModel>
-    
     <typeAlias alias="product" type="kz.zhanbolat.shop.entity.Product"/>
     
     <resultMap id="product_result_map" class="product">

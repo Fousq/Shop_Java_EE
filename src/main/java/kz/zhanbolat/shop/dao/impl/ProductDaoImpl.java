@@ -76,7 +76,11 @@ public class ProductDaoImpl implements ProductDao {
     @Override
     public List<Product> findAllByCategory(String categoryName) {
         try {
-            return sqlMapClient.queryForList("get_all_product_by_category", categoryName);
+            List<Product> products = sqlMapClient.queryForList("get_all_product_by_category", categoryName);
+            if (products.isEmpty()) {
+                throw new NoProductFoundException("Products with such category don't exist");
+            }
+            return products;
         } catch (SQLException e) {
             logger.error("Got exception on select query: ", e);
             throw new DaoException(e);
@@ -86,7 +90,11 @@ public class ProductDaoImpl implements ProductDao {
     @Override
     public Product findOneByName(String name) {
         try {
-            return (Product) sqlMapClient.queryForObject("get_product_by_name", name);
+            Product product =  (Product) sqlMapClient.queryForObject("get_product_by_name", name);
+            if (product == null) {
+                throw new NoProductFoundException("Such product doesn't exist");
+            }
+            return product;
         } catch (SQLException e) {
             logger.error("Got exception on select query: ", e);
             throw new NoProductFoundException(e);

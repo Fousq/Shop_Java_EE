@@ -6,7 +6,7 @@ import kz.zhanbolat.shop.service.builder.ReceiptFormat;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.ejb.Stateless;
+import javax.enterprise.context.ApplicationScoped;
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
@@ -14,7 +14,7 @@ import javax.json.JsonObjectBuilder;
 import java.math.BigDecimal;
 import java.util.*;
 
-@Stateless
+@ApplicationScoped
 @ReceiptFormat(ReceiptFormat.FormatType.JSON)
 public class JSONReceiptBuilderImpl implements ReceiptBuilder<JsonObject> {
     private static final Logger logger = LogManager.getLogger(JSONReceiptBuilderImpl.class);

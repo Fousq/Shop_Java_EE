@@ -3,6 +3,7 @@ package kz.zhanbolat.shop.service.impl;
 import kz.zhanbolat.shop.dao.ProductDao;
 import kz.zhanbolat.shop.entity.Product;
 import kz.zhanbolat.shop.entity.Receipt;
+import kz.zhanbolat.shop.exception.SameProductPurchaseException;
 import kz.zhanbolat.shop.service.PurchaseService;
 
 import javax.ejb.Stateless;
@@ -31,7 +32,7 @@ public class PurchaseServiceImpl implements PurchaseService {
         if (!purchasedProducts.containsKey(product)) {
             purchasedProducts.put(product, quantity);
         } else {
-            throw new IllegalStateException("Don't buy the same product");// will be changed
+            throw new SameProductPurchaseException("Don't buy the same product");
         }
     }
 

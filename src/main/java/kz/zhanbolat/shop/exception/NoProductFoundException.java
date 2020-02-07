@@ -9,10 +9,6 @@ public class NoProductFoundException extends DaoException {
         super(message);
     }
 
-    public NoProductFoundException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
     public NoProductFoundException(Throwable cause) {
         super(cause);
     }

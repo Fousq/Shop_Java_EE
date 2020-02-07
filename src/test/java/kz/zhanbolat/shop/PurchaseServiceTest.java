@@ -4,6 +4,7 @@ import kz.zhanbolat.shop.dao.ProductDao;
 import kz.zhanbolat.shop.entity.Product;
 import kz.zhanbolat.shop.entity.Receipt;
 import kz.zhanbolat.shop.exception.NoProductFoundException;
+import kz.zhanbolat.shop.exception.SameProductPurchaseException;
 import kz.zhanbolat.shop.service.impl.PurchaseServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -56,7 +57,7 @@ public class PurchaseServiceTest {
         assertEquals(2, products.size());
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test(expected = SameProductPurchaseException.class)
     public void testPurchaseShouldThrowException() {
         when(productDao.findOneByName("test1"))
                 .thenReturn(new Product(1, "test1", 1.0, "test1"));
